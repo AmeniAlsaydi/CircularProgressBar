@@ -13,6 +13,7 @@ class ProgressBarView: UIView {
     private var backgroundLayer: CAShapeLayer!
     private var foregroundLayer: CAShapeLayer!
     private var textLayer: CATextLayer!
+    private var gradientLayer: CAGradientLayer!
     
     public var progress: CGFloat = 0 { // will be progress bar stroke end value [ 0 - 1 ]
         didSet {
@@ -33,16 +34,23 @@ class ProgressBarView: UIView {
         backgroundLayer = createCircularLayer(strokeColor: UIColor.lightGray.cgColor, fillColor: UIColor.clear.cgColor, lineWidth: lineWidth)
         
         // aka progress layer
-        foregroundLayer = createCircularLayer(strokeColor: UIColor.red.cgColor, fillColor: UIColor.clear.cgColor, lineWidth: lineWidth)
+        foregroundLayer = createCircularLayer(strokeColor: UIColor.purple.cgColor, fillColor: UIColor.clear.cgColor, lineWidth: lineWidth)
         
         textLayer = createTextLayer(textColor: UIColor.white)
+        gradientLayer = CAGradientLayer()
         
-        //progress = 0
-        foregroundLayer.strokeEnd = 0
+        gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.5)
+        
+        gradientLayer.colors = [UIColor.systemBackground.cgColor, UIColor.systemPurple.cgColor]
+        gradientLayer.frame = rect
+        gradientLayer.mask = foregroundLayer
+        
+        progress = 0
         //foregroundLayer.strokeEnd = 0.3 // this is what i will use to display the progress of the application - incrementing or decrementing by 0.2
         
         layer.addSublayer(backgroundLayer)
-        layer.addSublayer(foregroundLayer)
+        layer.addSublayer(gradientLayer) // this was changed from forgroundLayer to gradientLayer after gradient was added
         layer.addSublayer(textLayer)
         
         
